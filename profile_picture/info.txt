@@ -1,0 +1,1 @@
+this /profile_picture folder is for uploading pic on temporary basis while we upload to S3
