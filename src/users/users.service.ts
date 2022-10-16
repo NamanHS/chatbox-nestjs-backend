@@ -39,7 +39,7 @@ export class UsersService {
         try {
             let { username, password } = data;
             if (username.includes(' ')) throw new UnprocessableEntityException('Username cannot contain spaces')
-            
+
             let is_username_non_unique = await this.UserModel.findOne({
                 username,
                 is_deleted: false
@@ -173,6 +173,20 @@ export class UsersService {
         } catch (error) {
             if (error instanceof UnprocessableEntityException) throw error;
             console.log('error in finding user account', error);
+            throw new InternalServerErrorException();
+        }
+    }
+
+    async isUserActive(user_id: string) {
+        try {
+            let does_user_exists = await this.UserModel.findOne({
+                _id: user_id,
+                is_deleted: false
+            })
+            if (!does_user_exists) return false;
+            return does_user_exists;
+        } catch (error) {
+            console.log('error in checking user is active', error);
             throw new InternalServerErrorException();
         }
     }
